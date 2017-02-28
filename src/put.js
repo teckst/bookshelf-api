@@ -21,7 +21,7 @@ module.exports = function(req, res, urlPieces, model, config) {
 		if(config.putBehavior && config.putBehavior.toLowerCase() === 'update') {
 			options.method = 'update';
 		}
-		let promise = model;
+	    let promise = model.authorizedWhere ? model.authorizedWhere(req) : model;
 		let hasTimestamps = model.hasTimestamps || [];
 		if(hasTimestamps.indexOf(config.deletedAttribute) >= 0) {
 			promise = promise.where(config.deletedAttribute, null);

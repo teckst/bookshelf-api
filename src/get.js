@@ -1,6 +1,6 @@
 let HowhapList = require('howhap-list');
 module.exports = function(req, res, urlPieces, model, config) {
-	let promise = model;
+	let promise = model.authorizedWhere ? model.authorizedWhere(req) : model;
 	let list = new HowhapList(
 		null, 
 		{

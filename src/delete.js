@@ -18,19 +18,20 @@ module.exports = function(req, res, urlPieces, model, config) {
 	}
 	else {
 		let result = {};
+	    let _model = model.authorizedWhere ? model.authorizedWhere(req) : model;
 		result[model.idAttribute] = model.id;
 		let promise = null;
 		let hasTimestamps = model.hasTimestamps || [];
 		if(hasTimestamps.indexOf(config.deletedAttribute) >= 0 && (!req.hardDelete && !config.hardDelete || (req.hardDelete === false))) {
 			let updatedData = {};
 			updatedData[model.hasTimestamps[2]] = new Date();
-			promise = model.save(updatedData, {method: 'update'})
+			promise = _model.save(updatedData, {method: 'update'})
 			.then(savedModel => {
 				res.json(result);
 			});
 		}
 		else {
-			promise = model.destroy({require: true})
+			promise = _model.destroy({require: true})
 			.then(destroyedModel => {
 				res.json(result);
 			});
@@ -54,7 +55,7 @@ module.exports = function(req, res, urlPieces, model, config) {
 		.then(() => {
 			return Promise.resolve({
 				urlPieces: urlPieces,
-				model: model
+				model: _model
 			});
 		});
 	}

@@ -151,6 +151,25 @@ describe('middleware.js', function() {
 			})
 			.catch(done);
 		});
+		it('should be able to get records by authorizedWhere', function(done) {
+			let req = makeReq('get');
+			req.originalUrl = '/productauthed';
+			let res = makeRes();
+			middleware(req, res).then(result => {
+				expect(res.json.calledWith([{
+					id: 3,
+					name: 'Shirt',
+					price: '42.99',
+					quantity: 74,
+					createdAt: new Date('2015-03-05 07:12:33'),
+					updatedAt: null,
+					deletedAt: null,
+					categoryId: 1
+				}])).to.be.true;
+				done();
+			})
+			.catch(done);
+		});
 		it('should be able to filter by a single where clause object', function(done) {
 			let req = makeReq('get');
 			req.originalUrl = '/product';
