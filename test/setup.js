@@ -8,6 +8,11 @@
 // 		directory: './test/seeds'
 // 	}
 // });
+
+// Note: for Postgresql on Linux, you'll need to update permissions
+// by adding the following (to allow no-password logins from localhost):
+// sudo vi /etc/postgresql/9.6/main/pg_hba.conf
+// host    all             all             127.0.0.1/32            trust
 let knex = require('knex')({
 	client: 'pg',
 	useNullAsDefault: true,
