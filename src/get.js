@@ -17,6 +17,12 @@ module.exports = function(req, res, urlPieces, model, config) {
 	if(req.query && Array.isArray(req.query.withRelated)) {
 		fetchParams.withRelated = req.query.withRelated;
 	}
+	if(req.query && req.query.limit) {
+		fetchParams.limit= req.query.limit;
+	}
+	if(req.query && req.query.offset) {
+		fetchParams.offset= req.query.offset;
+	}
 
 	// Get individual record
 	if(urlPieces.length > 1) {
