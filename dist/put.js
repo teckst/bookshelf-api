@@ -15,7 +15,7 @@ module.exports = function (req, res, urlPieces, model, config) {
 			});
 		});
 	} else {
-		var options = {};
+		var options = { patch: true, validation: false };
 		if (config.putBehavior && config.putBehavior.toLowerCase() === 'update') {
 			options.method = 'update';
 		}
@@ -25,7 +25,9 @@ module.exports = function (req, res, urlPieces, model, config) {
 			promise = promise.where(config.deletedAttribute, null);
 		}
 		return promise.save(req.body, options).then(function (savedModel) {
-			res.json(savedModel.toJSON());
+			return savedModel.refresh();
+		}).then(function (refreshedModel) {
+			res.json(refreshedModel.toJSON());
 		}).catch(function (err) {
 			var status = 500;
 			if (err.message === 'No Rows Updated') {

@@ -17,7 +17,7 @@ module.exports = function(req, res, urlPieces, model, config) {
 		});
 	}
 	else {
-		let options = {};
+		let options = {patch: true, validation: false};
 		if(config.putBehavior && config.putBehavior.toLowerCase() === 'update') {
 			options.method = 'update';
 		}
@@ -27,7 +27,9 @@ module.exports = function(req, res, urlPieces, model, config) {
 			promise = promise.where(config.deletedAttribute, null);
 		}
 		return promise.save(req.body, options).then(savedModel => {
-			res.json(savedModel.toJSON());
+            return savedModel.refresh();
+        }).then((refreshedModel) => {
+			res.json(refreshedModel.toJSON());
 		})
 		.catch(err => {
 			let status = 500;
