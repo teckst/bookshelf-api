@@ -50,8 +50,11 @@ module.exports = function (req, res, urlPieces, model, config) {
 
 				// Offset support
 			}
-
-			promise = promise.fetchAll(fetchParams);
+			if (promise.fetchPage) {
+				promise = promise.fetchPage(fetchParams);
+			} else {
+				promise = promise.fetchAll(fetchParams);
+			}
 		}
 	return promise.then(function (results) {
 		if (!results) {
