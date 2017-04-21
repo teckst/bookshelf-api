@@ -1,6 +1,7 @@
 'use strict';
 
 var HowhapList = require('howhap-list');
+var format = require('./format');
 module.exports = function (req, res, urlPieces, model, config) {
 	var list = new HowhapList(null, {
 		availableErrors: config.errors
@@ -25,9 +26,7 @@ module.exports = function (req, res, urlPieces, model, config) {
 			promise = promise.where(config.deletedAttribute, null);
 		}
 		return promise.save(req.body, options).then(function (savedModel) {
-			return savedModel.refresh();
-		}).then(function (refreshedModel) {
-			res.json(refreshedModel.toJSON());
+			res.json(format(savedModel, req._meta));
 		}).catch(function (err) {
 			var status = 500;
 			if (err.message === 'No Rows Updated') {

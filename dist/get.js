@@ -1,6 +1,8 @@
 'use strict';
 
 var HowhapList = require('howhap-list');
+var format = require('./format');
+
 module.exports = function (req, res, urlPieces, model, config) {
 	var promise = model.authorizedWhere ? model.authorizedWhere(req) : model;
 	var list = new HowhapList(null, {
@@ -64,7 +66,7 @@ module.exports = function (req, res, urlPieces, model, config) {
 			});
 			res.status(config.errors.RECORD_NOT_FOUND.status).json(list.toObject());
 		} else {
-			res.json(results.toJSON());
+			res.json(format(results, req._meta));
 		}
 	}).catch(function (err) {
 		list.add('RECORD_NOT_FOUND', {

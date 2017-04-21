@@ -1,6 +1,7 @@
 'use strict';
 
 var HowhapList = require('howhap-list');
+var format = require('./format');
 module.exports = function (req, res, urlPieces, model, config) {
 	var list = new HowhapList(null, {
 		availableErrors: config.errors
@@ -8,7 +9,7 @@ module.exports = function (req, res, urlPieces, model, config) {
 
 	model.set(req.body);
 	return model.save().then(function (savedModel) {
-		res.json(savedModel.toJSON());
+		res.json(format(savedModel, req._meta));
 	}).catch(function (err) {
 		list.add('UNKNOWN', {
 			message: err.toString()

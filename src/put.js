@@ -1,7 +1,8 @@
 let HowhapList = require('howhap-list');
+let format = require('./format');
 module.exports = function(req, res, urlPieces, model, config) {
 	let list = new HowhapList(
-		null, 
+		null,
 		{
 			availableErrors: config.errors
 		}
@@ -27,9 +28,7 @@ module.exports = function(req, res, urlPieces, model, config) {
 			promise = promise.where(config.deletedAttribute, null);
 		}
 		return promise.save(req.body, options).then(savedModel => {
-            return savedModel.refresh();
-        }).then((refreshedModel) => {
-			res.json(refreshedModel.toJSON());
+			res.json(format(savedModel, req._meta));
 		})
 		.catch(err => {
 			let status = 500;
@@ -52,5 +51,5 @@ module.exports = function(req, res, urlPieces, model, config) {
 				model: model
 			});
 		});
-	}	
+	}
 };

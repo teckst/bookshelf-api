@@ -1,8 +1,10 @@
 let HowhapList = require('howhap-list');
+let format = require('./format');
+
 module.exports = function(req, res, urlPieces, model, config) {
 	let promise = model.authorizedWhere ? model.authorizedWhere(req) : model;
 	let list = new HowhapList(
-		null, 
+		null,
 		{
 			availableErrors: config.errors
 		}
@@ -40,7 +42,7 @@ module.exports = function(req, res, urlPieces, model, config) {
 					promise = promise.where(req.query.where);
 				}
 			}
-			
+
 			// Order by support
 			if(req.query.sort) {
 				let direction = req.query.direction || 'ASC';
@@ -71,7 +73,7 @@ module.exports = function(req, res, urlPieces, model, config) {
 			res.status(config.errors.RECORD_NOT_FOUND.status).json(list.toObject());
 		}
 		else {
-			res.json(results.toJSON());
+			res.json(format(results, req._meta));
 		}
 	})
 	.catch(function(err) {
