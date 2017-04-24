@@ -28,7 +28,9 @@ module.exports = function(req, res, urlPieces, model, config) {
 			promise = promise.where(config.deletedAttribute, null);
 		}
 		return promise.save(req.body, options).then(savedModel => {
-			res.json(format(savedModel, req._meta));
+			return savedModel.refresh()
+		}).then((updatedModel) => {
+			res.json(format(updatedModel, req._meta));
 		})
 		.catch(err => {
 			let status = 500;

@@ -26,7 +26,9 @@ module.exports = function (req, res, urlPieces, model, config) {
 			promise = promise.where(config.deletedAttribute, null);
 		}
 		return promise.save(req.body, options).then(function (savedModel) {
-			res.json(format(savedModel, req._meta));
+			return savedModel.refresh();
+		}).then(function (updatedModel) {
+			res.json(format(updatedModel, req._meta));
 		}).catch(function (err) {
 			var status = 500;
 			if (err.message === 'No Rows Updated') {
