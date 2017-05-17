@@ -50,7 +50,7 @@ module.exports = function (models, config) {
 
 		var filteredUrlPieces = [modelName];
 		var Model = models[modelName];
-		var model = new Model();
+		var model = req.model || new Model();
 		if (modelId !== null) {
 			var params = {};
 			params[model.idAttribute] = modelId;
