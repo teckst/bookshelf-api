@@ -2,7 +2,7 @@ let HowhapList = require('howhap-list');
 let format = require('./format');
 
 module.exports = function(req, res, urlPieces, model, config) {
-	let promise = model.authorizedWhere ? model.authorizedWhere(req) : model;
+	let promise = model;
 	let list = new HowhapList(
 		null,
 		{

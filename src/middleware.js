@@ -58,6 +58,10 @@ module.exports = function(models, config) {
 			filteredUrlPieces.push(modelId);
 		}
 
+		(req.scopes || []).forEach(([scope, ...args]) => {
+			model[scope](...args);
+		})
+
 
 		if(method === 'get') {
 			return get(req, res, filteredUrlPieces, model, config);

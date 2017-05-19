@@ -1,5 +1,9 @@
 'use strict';
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
+
 var _ = require('lodash');
 var get = require('./get');
 var post = require('./post');
@@ -57,6 +61,16 @@ module.exports = function (models, config) {
 			model = Model.forge(params);
 			filteredUrlPieces.push(modelId);
 		}
+
+		(req.scopes || []).forEach(function (_ref) {
+			var _model;
+
+			var _ref2 = _toArray(_ref),
+			    scope = _ref2[0],
+			    args = _ref2.slice(1);
+
+			(_model = model)[scope].apply(_model, _toConsumableArray(args));
+		});
 
 		if (method === 'get') {
 			return get(req, res, filteredUrlPieces, model, config);
